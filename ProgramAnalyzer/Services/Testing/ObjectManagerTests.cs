@@ -81,18 +81,20 @@ namespace Services.Testing
             Assert.Equal(items.Split(',').Count(), ObjectManager.SecurityObjects.Count);
         }
 
-        [Fact(Skip="Not implemented")]
+        [Fact]
         public void InitializeSecurityObjects_PassedMultipleValuesWithSameSecurityObject_ResultsShownInSecurityObjectsList()
         {
             /// Initialize
-            // 
+            // Create a list containing one security object with multiple secure attributes.
+            var items = "A.b, A.c";
 
             /// Test
-            //
+            // Initialize the security objects.
+            ObjectManager.InitializeSecurityObjects(items);
 
             /// Assert
-            //
-
+            // Ensure that one security object exists.
+            Assert.Equal(1, ObjectManager.SecurityObjects.Count);
         }
     }
 }
