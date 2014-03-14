@@ -23,19 +23,58 @@ namespace Services
         /// This will create the Security Objects with the attributes
         /// in place.
         /// </summary>
-        public void InitializeSecurityObjects(string attributes)
+        public void InitializeSecurityObjects(string items)
         {
-            throw new NotImplementedException();
-            //// Create a list of security objects where each entry is of the form:
-            //// A.c
-            //// where A is a security object and c is the secure attribute.
-            //List<string> objectsAndAttributes = attributes.Replace(" ", "").Split(',').ToList();
+            // Split the items on the comma.
+            var splitItems = items.Split(',');
 
-            //// Go through the list and add to the SecurityObjects.
-            //for (int i = 0; i < objectsAndAttributes.Count; i++)
-            //{
-            //    // Set objects
-            //}
+            // Go through the items and create security objects.
+            foreach(string s in splitItems)
+            {
+                // Get the name of the security object and attribute.
+                var objects = s.Split('.');
+                var securityObjectName = objects[0].Replace(" ", "");
+                var attributeName = objects[1].Replace(" ", "");
+
+                // Check if the security object already exists in our list.
+                if(CheckIfSecurityObjectExists(securityObjectName))
+                {
+                    // Find the security object and add the new secure attribute.
+                    var obj = SecurityObjects.Where(i => i.Name == securityObjectName).Single();
+                    obj.SecureAttributes.Add(new DTOs.Attribute
+                        {
+                            Name = attributeName,
+                            IsSecure = true
+                        });
+                }
+                else
+                {
+                    // Add the new security object with its object.
+                    SecurityObjects.Add(new SecurityObject
+                        {
+                            Name = securityObjectName,
+                            SecureAttributes = new List<DTOs.Attribute>()
+                        });
+                    var obj = SecurityObjects.Where(i => i.Name == securityObjectName).Single();
+                    obj.SecureAttributes.Add(new DTOs.Attribute
+                        {
+                            Name = attributeName,
+                            IsSecure = true
+                        });
+                }
+            }
+         }
+
+        /// <summary>
+        /// Checks the list of security objects and sees if the given security
+        /// object's name exists.
+        /// </summary>
+        private bool CheckIfSecurityObjectExists(string name)
+        {
+            foreach(SecurityObject s in SecurityObjects)
+                if (s.Name == name)
+                    return true;
+            return false;
         }
     }
 }
