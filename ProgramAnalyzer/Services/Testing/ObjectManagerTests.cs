@@ -149,5 +149,28 @@ namespace Services.Testing
             Assert.Equal(1, attr1AfterTest);
             Assert.Equal(1, attr2AfterTest);
         }
+
+        [Fact]
+        public void InitializeSecurityObjectsMethods_ProgramContainsSecondClassThatCallsMethodThatCallsMethodInSecureObject_MethodIsAddedToFirstClassMethodsAffectedMethods()
+        {
+            /// Initialize
+            // Set the security object to one object with one secure attribute
+            var item = "A.b";
+            ObjectManager.InitializeSecurityObjects(item);
+
+            // Give the program two classes where the second one modifies the secure object's attribute through a method call.
+            var programText = "class A { private boolean b; public void Changeb () { b = false; } } class B { public void ChangeAttr () { A.Changeb(); } }";
+
+            /// Test
+            // Call the method 
+            ObjectManager.InitializeSecurityObjectMethods(programText);
+
+            // Get the affected methods.
+            var affectedMethodCount = ObjectManager.SecurityObjects.Single().AffectSecureAttributesMethods.Single().AccessedMethods.Count;
+
+            /// Assert
+            // Ensure that the method in the second class is added to the first object's method's affected methods.
+            Assert.Equal(1, affectedMethodCount);
+        }
     }
 }

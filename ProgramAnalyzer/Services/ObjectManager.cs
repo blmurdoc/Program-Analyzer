@@ -84,45 +84,59 @@ namespace Services
                     var classDeclaration = programText.Substring(startingIndex).Split(' ');
                     for(int i = 0; i < classDeclaration.Count(); i++)
                     {
-                        // We only care about public methods.
-                        // Will be in the form:
-                        // public <return type> <method name> (<parameters>)
-                        if(classDeclaration[i] == "public" && i < classDeclaration.Count() - 4 && classDeclaration[i + 3].First() == '(')
+                        // Check the public methods.
+                        PublicMethodCheck(classDeclaration, i, s);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checks for public methods.
+        /// </summary>
+        private void PublicMethodCheck(string[] classDeclaration, int i, SecurityObject s)
+        {
+            if (classDeclaration[i] == "public" && i < classDeclaration.Count() - 4 && classDeclaration[i + 3].First() == '(')
+            {
+                // Next word will be the return type so we need i + 2 for the name of the method.
+                var name = classDeclaration[i + 2];
+
+                // Should be the parameters of the function
+                var loopCount = 0;
+
+                // Go throught the public method to see if it alters any attributes.
+                while (classDeclaration[i + loopCount] != "}")
+                {
+                    CheckMethodAltersAttributeDirectly(s, classDeclaration, loopCount, name, i);
+                    loopCount++;
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Check if the method alters any secure attributes directly.
+        /// </summary>
+        private void CheckMethodAltersAttributeDirectly(SecurityObject s, string[] classDeclaration, int loopCount, string name, int i)
+        {
+            foreach (DTOs.Attribute a in s.SecureAttributes)
+            {
+                // Found a affected method. Add it to the security object's methods.
+                if (classDeclaration[i + loopCount] == a.Name)
+                {
+                    var methodExists = s.AffectSecureAttributesMethods.Where(j => j.Name == name).SingleOrDefault();
+                    // Check if method already exists.
+                    if (methodExists != null)
+                        s.AffectSecureAttributesMethods.Where(k => k.Name == name).Single().AccessedAttributes.Add(a);
+                    // Method doesn't exist.
+                    else
+                    {
+                        var method = new DTOs.Method()
                         {
-                            // Next word will be the return type so we need i + 2 for the name of the method.
-                            var name = classDeclaration[i + 2];
-
-                            // Should be the parameters of the function
-                            var loopCount = 0;
-
-                            // Go throught the public method to see if it alters any attributes.
-                            while(classDeclaration[i + loopCount] != "}")
-                            {
-                                foreach(DTOs.Attribute a in s.SecureAttributes)
-                                {
-                                    // Found a affected method. Add it to the security object's methods.
-                                    if(classDeclaration[i + loopCount] == a.Name)
-                                    {
-                                        var methodExists = s.AffectSecureAttributesMethods.Where(j => j.Name == name).SingleOrDefault();
-                                        // Check if method already exists.
-                                        if(methodExists != null)
-                                            s.AffectSecureAttributesMethods.Where(k => k.Name == name).Single().AccessedAttributes.Add(a);
-                                        // Method doesn't exist.
-                                        else
-                                        {
-                                            var method = new DTOs.Method()
-                                            {
-                                                Name = name,
-                                                AccessedAttributes = new List<DTOs.Attribute>()
-                                            };
-                                            method.AccessedAttributes.Add(a);
-                                            s.AffectSecureAttributesMethods.Add(method);
-                                        }
-                                    }
-                                }
-                                loopCount++;
-                            }
-                        }
+                            Name = name,
+                            AccessedAttributes = new List<DTOs.Attribute>()
+                        };
+                        method.AccessedAttributes.Add(a);
+                        s.AffectSecureAttributesMethods.Add(method);
                     }
                 }
             }
