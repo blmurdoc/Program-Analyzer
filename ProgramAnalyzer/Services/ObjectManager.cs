@@ -11,7 +11,8 @@ namespace Services
     {
         // Initialize the lists.
         public List<SecurityObject> SecurityObjects = new List<SecurityObject>();
-        
+        public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
+
         /// <summary>
         /// The attributes list will be in the form:
         /// 
@@ -90,7 +91,14 @@ namespace Services
                 }
             }
         }
+        /// <summary>
+        /// h
+        /// </summary>
+        /// <param name="programText"></param>
+        public void InitializeUnevaluatedCaseOneObjects(string programText)
+        {
 
+        }
         /// <summary>
         /// Checks for public methods.
         /// </summary>
