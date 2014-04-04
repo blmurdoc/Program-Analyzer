@@ -55,7 +55,23 @@ namespace Services
         }
 
         [Fact]
-        public void InitializeUnevaluatedCaseOneObjects_UnevaluatedObject_ObjectAddedToSecureList()
+        public void InitializeUnevaluatedCaseOneObjects_UnevaluatedObjectContainsMethod_MethodAddedToUnevaluatedObjectsAccessedMethodsList()
+        {
+            /// Initialize
+            // Create a program text that has a class with a method
+            var programText = "class A { public void B () { } }";
+
+            /// Test
+            // Call the initialize method
+            ObjectManager.InitializeUnevaluatedCaseOneObjects(programText);
+
+            /// Assert
+            // Ensure that the unevaluated object has the method
+            Assert.Equal(1, ObjectManager.UnevaluatedObjects.Single().AccessedMethods.Count);
+        }
+
+        [Fact]
+        public void InitializeUnevaluatedCaseOneObjects_UnevaluatedObjectContainsMethodThatAccessesSecureObjectsMethodThatAccessesSecureAttribute_ObjectAddedToSecureList()
         {
             /// Initialize
             // Call initialize secutity objects with secure object 'item'
@@ -63,7 +79,7 @@ namespace Services
             ObjectManager.InitializeSecurityObjects(item);
 
             var classADeclaration = "class A { private boolean b; public void Method_b () { b = false; } }"; 
-            var classXDeclaration = "class X { public A someA = new A(); public void Method_y () { someA.Method_b () } }";
+            var classXDeclaration = "class X { A someA = new A(); public void Method_y () { someA.Method_b () } }";
             var programText = String.Format("{0} {1}", classADeclaration, classXDeclaration);
             ObjectManager.InitializeSecurityObjectMethods(programText);
 
