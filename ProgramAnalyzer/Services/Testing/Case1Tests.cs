@@ -14,7 +14,8 @@ namespace Services
         [Fact]
         public void InitializeUnevaluatedCaseOneObjects_UnevaluatedClass_AddedToUnevaluatedObjectsList()
         {
-            // Give the program two classes where the second one modifies the secure object's attribute through a method call.
+            /// Initialize
+            // Create the program text of a class that isn't secure.
             var programText = "class A { }";
 
             /// Test
