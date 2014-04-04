@@ -12,6 +12,7 @@ namespace Services
         // Initialize the lists.
         public List<SecurityObject> SecurityObjects = new List<SecurityObject>();
         public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
+        public Case1 Case1Objects = new Case1();
 
         /// <summary>
         /// The attributes list will be in the form:
@@ -91,14 +92,65 @@ namespace Services
                 }
             }
         }
+
         /// <summary>
         /// Takes in the program and places objects into the unevaluated objects if they are 
         /// not secure.
         /// </summary>
         public void InitializeUnevaluatedCaseOneObjects(string programText)
         {
-            throw new NotImplementedException();
+            string[] delimiters = new string[1];
+            delimiters[0] = "class";
+            var classes = programText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+
+            // Go through each class declaration
+            foreach(string ss in classes)
+            {
+                char[] splitting = new char[1];
+                splitting[0] = ' ';
+                var classDeclaration = ss.Split(splitting, StringSplitOptions.RemoveEmptyEntries);
+                var className = classDeclaration[0];
+                bool isInSecurityObjects = false;
+                foreach(SecurityObject s in SecurityObjects)
+                {
+                    if (s.Name == className)
+                        isInSecurityObjects = true;
+                }
+                if(!isInSecurityObjects && UnevaluatedObjects.Where(i => i.Name == className).SingleOrDefault() == null)
+                {
+                    // Create the unevaluated object
+                    UnevaluatedObjects.Add(new UnevaluatedObject()
+                        {
+                            Name = className,
+                            IsSemiSecurity = false,
+                            AccessedMethods = new List<Method>()
+                        });
+
+                    // Add the methods from the unevaluated class to its accessed methods.
+                    for (int i = 0; i < classDeclaration.Length; i++ )
+                    {
+                        if (i < classDeclaration.Length - 3 && classDeclaration[i] == "public" && classDeclaration[i + 3].First() == '(')
+                        {
+                            var methodToAdd = new Method() { Name = classDeclaration[1] };
+                            var obj = UnevaluatedObjects.Where(j => j.Name == className).Single();
+                            obj.AccessedMethods.Add(methodToAdd);
+
+                            foreach(SecurityObject so in SecurityObjects)
+                            {
+                                // Check if any security object's accessed methods are called from this method.
+                                // Similar to the way the test is structured.
+                                foreach (Method m in so.AffectSecureAttributesMethods)
+                                {
+                                    // Check if the name is called.
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
         }
+
         /// <summary>
         /// Checks for public methods.
         /// </summary>
