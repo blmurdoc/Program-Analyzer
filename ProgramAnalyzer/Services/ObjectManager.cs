@@ -92,12 +92,12 @@ namespace Services
             }
         }
         /// <summary>
-        /// h
+        /// Takes in the program and places objects into the unevaluated objects if they are 
+        /// not secure.
         /// </summary>
-        /// <param name="programText"></param>
         public void InitializeUnevaluatedCaseOneObjects(string programText)
         {
-
+            throw new NotImplementedException();
         }
         /// <summary>
         /// Checks for public methods.
