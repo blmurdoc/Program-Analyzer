@@ -149,6 +149,5 @@ namespace Services.Testing
             Assert.Equal(1, attr1AfterTest);
             Assert.Equal(1, attr2AfterTest);
         }
-
     }
 }
