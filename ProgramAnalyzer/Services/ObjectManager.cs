@@ -11,7 +11,8 @@ namespace Services
     {
         // Initialize the lists.
         public List<SecurityObject> SecurityObjects = new List<SecurityObject>();
-        
+        public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
+
         /// <summary>
         /// The attributes list will be in the form:
         /// 
@@ -53,7 +54,8 @@ namespace Services
                     SecurityObjects.Add(new SecurityObject
                         {
                             Name = securityObjectName,
-                            SecureAttributes = new List<DTOs.Attribute>()
+                            SecureAttributes = new List<DTOs.Attribute>(),
+                            AffectSecureAttributesMethods = new List<Method>()
                         });
                     var obj = SecurityObjects.Where(i => i.Name == securityObjectName).Single();
                     obj.SecureAttributes.Add(new DTOs.Attribute
@@ -64,6 +66,89 @@ namespace Services
                 }
             }
          }
+
+        /// <summary>
+        /// Called after initializing the security object attributes. 
+        /// This will go through the given program and set the methods that
+        /// interact with the security object's attributes.
+        /// </summary>
+        public void InitializeSecurityObjectMethods(string programText)
+        {
+            foreach(SecurityObject s in SecurityObjects)
+            {
+                // Search the program for the class declaration.
+                var startingIndex = programText.IndexOf(String.Format("class {0}", s.Name));
+                
+                // Found the start of the class declaration.
+                if(startingIndex != -1)
+                {
+                    var classDeclaration = programText.Substring(startingIndex).Split(' ');
+                    for(int i = 0; i < classDeclaration.Count(); i++)
+                    {
+                        // Check the public methods.
+                        PublicMethodCheck(classDeclaration, i, s);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// h
+        /// </summary>
+        /// <param name="programText"></param>
+        public void InitializeUnevaluatedCaseOneObjects(string programText)
+        {
+
+        }
+        /// <summary>
+        /// Checks for public methods.
+        /// </summary>
+        private void PublicMethodCheck(string[] classDeclaration, int i, SecurityObject s)
+        {
+            if (classDeclaration[i] == "public" && i < classDeclaration.Count() - 4 && classDeclaration[i + 3].First() == '(')
+            {
+                // Next word will be the return type so we need i + 2 for the name of the method.
+                var name = classDeclaration[i + 2];
+
+                // Should be the parameters of the function
+                var loopCount = 0;
+
+                // Go throught the public method to see if it alters any attributes.
+                while (classDeclaration[i + loopCount] != "}")
+                {
+                    CheckMethodAltersAttributeDirectly(s, classDeclaration, loopCount, name, i);
+                    loopCount++;
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Check if the method alters any secure attributes directly.
+        /// </summary>
+        private void CheckMethodAltersAttributeDirectly(SecurityObject s, string[] classDeclaration, int loopCount, string name, int i)
+        {
+            foreach (DTOs.Attribute a in s.SecureAttributes)
+            {
+                // Found a affected method. Add it to the security object's methods.
+                if (classDeclaration[i + loopCount] == a.Name)
+                {
+                    var methodExists = s.AffectSecureAttributesMethods.Where(j => j.Name == name).SingleOrDefault();
+                    // Check if method already exists.
+                    if (methodExists != null)
+                        s.AffectSecureAttributesMethods.Where(k => k.Name == name).Single().AccessedAttributes.Add(a);
+                    // Method doesn't exist.
+                    else
+                    {
+                        var method = new DTOs.Method()
+                        {
+                            Name = name,
+                            AccessedAttributes = new List<DTOs.Attribute>()
+                        };
+                        method.AccessedAttributes.Add(a);
+                        s.AffectSecureAttributesMethods.Add(method);
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Checks the list of security objects and sees if the given security
