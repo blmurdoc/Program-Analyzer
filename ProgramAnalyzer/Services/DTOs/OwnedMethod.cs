@@ -8,15 +8,13 @@ using System.Threading.Tasks;
 namespace Services.DTOs
 {
     [DataContract]
-    public class SecurityObject
+    public class OwnedMethod
     {
         [DataMember]
         public string Name { get; set; }
-
         [DataMember]
-        public List<Attribute> SecureAttributes { get; set; }
-
+        public bool DirectlyAffectSecurityAttribute { get; set; }
         [DataMember]
-        public List<Method> AffectSecureAttributesMethods { get; set; }
+        public List<CalledByMethod> CalledByMethods { get; set; }
     }
 }

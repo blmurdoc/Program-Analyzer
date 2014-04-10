@@ -8,12 +8,11 @@ using System.Threading.Tasks;
 namespace Services.DTOs
 {
     [DataContract]
-    public class Attribute
+    public class CalledByMethod
     {
         [DataMember]
         public string Name { get; set; }
-
         [DataMember]
-        public bool IsSecure { get; set; }
+        public string ParentObjectName { get; set; }
     }
 }

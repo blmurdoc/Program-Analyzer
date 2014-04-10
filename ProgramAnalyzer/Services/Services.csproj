@@ -55,18 +55,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cases\Case1.cs" />
-    <Compile Include="ObjectManager.cs" />
-    <Compile Include="Testing\Case1Tests.cs" />
-    <Compile Include="DTOs\Attribute.cs" />
-    <Compile Include="DTOs\Method.cs" />
-    <Compile Include="DTOs\SecurityObject.cs" />
+    <Compile Include="DTOs\CalledByMethod.cs" />
+    <Compile Include="DTOs\OwnedMethod.cs" />
+    <Compile Include="DTOs\SecurityAttribute.cs" />
     <Compile Include="DTOs\UnevaluatedObject.cs" />
+    <Compile Include="Managers\UnevaluatedObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Testing\ObjectManagerTests.cs" />
+    <Compile Include="Managers\SecurityAttributeManager.cs" />
+    <Compile Include="Testing\SecurityAttributeTests.cs" />
+    <Compile Include="Testing\UnevaluatedObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Cases\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

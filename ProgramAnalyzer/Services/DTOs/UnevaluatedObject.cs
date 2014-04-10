@@ -12,11 +12,11 @@ namespace Services.DTOs
     {
         [DataMember]
         public string Name { get; set; }
-
         [DataMember]
-        public List<Method> AccessedMethods { get; set; }
-
+        public List<OwnedMethod> Methods { get; set; }
         [DataMember]
-        public bool IsSemiSecurity = false;
+        public bool IsSecurityObject { get; set; }
+        [DataMember]
+        public bool IsSemiSecurityObject { get; set; }
     }
 }
