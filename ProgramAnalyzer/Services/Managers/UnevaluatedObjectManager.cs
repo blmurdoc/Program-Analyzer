@@ -12,6 +12,7 @@ namespace Services.Managers
     {
         public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
         public SecurityAttributeManager SecurityAttributeManager = new SecurityAttributeManager();
+        public Case1Manager Case1Manager = new Case1Manager();
 
         /// <summary>
         /// Goes through the program code and creates classes for all given objects.
@@ -31,8 +32,11 @@ namespace Services.Managers
             // Split the program text by classes
             string[] delimiters1 = new string[1];
             delimiters1[0] = "class";
-            string[] delimiters2 = new string[1];
+            string[] delimiters2 = new string[4];
             delimiters2[0] = " ";
+            delimiters2[1] = "\n";
+            delimiters2[2] = "\t";
+            delimiters2[3] = "\r";
             var classes = programText.Split(delimiters1, StringSplitOptions.RemoveEmptyEntries);
 
             // Go through each class and add it to the list
@@ -52,7 +56,7 @@ namespace Services.Managers
                 // Used to hold the methods names for the original attributes
                 Dictionary<string, string> ObjectReferences = new Dictionary<string, string>();
 
-                while (!encounteredOpenBrace || bracesCount != 0)
+                while (currentIndex < brokenUpClass.Count() && (!encounteredOpenBrace || bracesCount != 0))
                 {
                     currentEntry = brokenUpClass[currentIndex];
 

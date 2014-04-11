@@ -56,12 +56,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\CalledByMethod.cs" />
+    <Compile Include="DTOs\Case1Object.cs" />
     <Compile Include="DTOs\OwnedMethod.cs" />
     <Compile Include="DTOs\SecurityAttribute.cs" />
     <Compile Include="DTOs\UnevaluatedObject.cs" />
+    <Compile Include="Managers\Case1Manager.cs" />
     <Compile Include="Managers\UnevaluatedObjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Managers\SecurityAttributeManager.cs" />
+    <Compile Include="Testing\Case1Tests.cs" />
     <Compile Include="Testing\SecurityAttributeTests.cs" />
     <Compile Include="Testing\UnevaluatedObjectTests.cs" />
   </ItemGroup>

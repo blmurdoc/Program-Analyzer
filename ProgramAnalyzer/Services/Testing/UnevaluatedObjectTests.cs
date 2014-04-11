@@ -123,5 +123,21 @@ namespace Services.Testing
             // Ensure that Method1 is marked as directly affects security attribute
             Assert.True(UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Single().DirectlyAffectSecurityAttribute);
         }
+
+        [Fact]
+        public void InitializeUnevaluatedObjects_ProgramTextContainsMain_MainNotAddedToClassesFunctions()
+        {
+            /// Initialize
+            // Create the program Text
+            var programText = "class A { } int main () { }";
+
+            /// Test
+            // Call the MUT
+            UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
+
+            /// Assert
+            // Ensure that the main is not added to the class A
+            Assert.Equal(0, UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Count);
+        }
     }
 }
