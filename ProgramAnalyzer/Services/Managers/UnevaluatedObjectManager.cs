@@ -13,6 +13,7 @@ namespace Services.Managers
         public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
         public SecurityAttributeManager SecurityAttributeManager = new SecurityAttributeManager();
         public Case1Manager Case1Manager = new Case1Manager();
+        public Case2Manager Case2Manager = new Case2Manager();
 
         /// <summary>
         /// Goes through the program code and creates classes for all given objects.
@@ -75,6 +76,34 @@ namespace Services.Managers
                         // Method
                         if(brokenUpClass[currentIndex + 3].First() == '(')
                         {
+                            // Read the parameters
+                            var startingParameterIndex = currentIndex + 3;
+                            var endingParameterIndex = startingParameterIndex;
+                            while (!brokenUpClass[endingParameterIndex].Contains(')'))
+                                endingParameterIndex++;
+                            var startingParameterEntry = brokenUpClass[startingParameterIndex];
+                            var endingParameterEntry = brokenUpClass[endingParameterIndex];
+
+                            var parameters = "";
+                            for(int i = startingParameterIndex; i <= endingParameterIndex; i++)
+                            {
+                                if (i != endingParameterIndex)
+                                    parameters += String.Format("{0} ", brokenUpClass[i]);
+                                else
+                                    parameters += brokenUpClass[i];
+                            }
+
+                            // Set the translation table for the method
+                            string[] delimitersParameters = new string[4];
+                            delimitersParameters[0] = " ";
+                            delimitersParameters[1] = ",";
+                            delimitersParameters[2] = "(";
+                            delimitersParameters[3] = ")";
+                            var splitParamters = parameters.Split(delimitersParameters, StringSplitOptions.RemoveEmptyEntries);
+                            var methodDictionary = new Dictionary<string, string>();
+                            for(int i = 0; i < splitParamters.Count() - 1; i = i + 2)
+                                methodDictionary.Add(splitParamters[i], splitParamters[i + 1]);
+
                             var method = new OwnedMethod() { Name = brokenUpClass[currentIndex + 2], CalledByMethods = new List<CalledByMethod>() };
                             var tempMethodEntry = brokenUpClass[currentIndex + 1];
                             var tempMethodIndex = currentIndex + 1;
@@ -99,10 +128,24 @@ namespace Services.Managers
                                     string[] methodDelimiter = new string[1];
                                     methodDelimiter[0] = ".";
                                     var methodSplit = tempMethodEntry.Split(methodDelimiter, StringSplitOptions.RemoveEmptyEntries);
-                                    var dictionaryEntry = ObjectReferences.Where(i => i.Value == methodSplit[0]).Single();
+                                    
+                                    // Check if the object is a reference to a parameter
+                                    var paramKey = "";
+                                    foreach (string dictEntry in methodDictionary.Values)
+                                    {
+                                        if (dictEntry == methodSplit[0])
+                                            paramKey = methodDictionary.Where(i => i.Value == dictEntry).Single().Key;
+                                    }
+                                    if (paramKey != "")
+                                    {
+                                        if (ObjectReferences.Where(i => i.Key == paramKey && i.Value == methodSplit[0]).Count() == 0)
+                                            ObjectReferences.Add(paramKey, methodSplit[0]);
+                                    }
+
+                                    var dictionaryEntry = ObjectReferences.Where(i => i.Value == methodSplit[0]).Single();                                    
 
                                     // Add this method to the original object's called by methods
-                                    var calledByMethod = new CalledByMethod() { Name = method.Name, ParentObjectName = className };
+                                    var calledByMethod = new CalledByMethod() { Name = method.Name, ParentObjectName = paramKey == "" ? className : paramKey };
                                     var originalObject = UnevaluatedObjects.Where(i => i.Name == dictionaryEntry.Key).Single();
                                     originalObject.Methods.Where(i => i.Name == methodSplit[1]).Single().CalledByMethods.Add(calledByMethod);
                                 }
@@ -118,10 +161,11 @@ namespace Services.Managers
                                     // Set the affect field
                                     method.DirectlyAffectSecurityAttribute = checkSecurityAttribute;
                                 }
-                                
-
+                                // Set the translation dictionary.
+                                method.ParameterTranslations = methodDictionary;
                                 tempMethodIndex++;
                             }
+                            
                             Methods.Add(method);
                         }
                         // Attribute

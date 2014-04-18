@@ -9,7 +9,7 @@ namespace Services.Managers
 {
     public class Case1Manager
     {
-        public List<Case1Object> Case1Objects = new List<Case1Object>();
+        public List<CaseObject> Case1Objects = new List<CaseObject>();
         /// <summary>
         /// UO methods call SO methods that affect SA
         /// </summary>
@@ -30,7 +30,7 @@ namespace Services.Managers
                     foreach (CalledByMethod cm in om.CalledByMethods)
                     {
                         // Add the case one object to the list.
-                        var case1object = new Case1Object()
+                        var case1object = new CaseObject()
                         {
                             Name = cm.ParentObjectName,
                             MethodNames = new List<string>()

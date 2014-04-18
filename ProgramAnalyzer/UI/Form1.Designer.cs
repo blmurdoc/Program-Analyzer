@@ -35,7 +35,7 @@
             this.btnBrowseProgramText = new System.Windows.Forms.Button();
             this.txtProgramTextFileName = new System.Windows.Forms.TextBox();
             this.btnRunAnalysis = new System.Windows.Forms.Button();
-            this.txtResults = new System.Windows.Forms.TextBox();
+            this.txtResults = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // openFileDialogAttributes
@@ -92,11 +92,11 @@
             // 
             // txtResults
             // 
-            this.txtResults.Location = new System.Drawing.Point(63, 252);
-            this.txtResults.Multiline = true;
+            this.txtResults.Location = new System.Drawing.Point(49, 232);
             this.txtResults.Name = "txtResults";
-            this.txtResults.Size = new System.Drawing.Size(890, 382);
+            this.txtResults.Size = new System.Drawing.Size(601, 324);
             this.txtResults.TabIndex = 6;
+            this.txtResults.Text = "";
             // 
             // Form1
             // 
@@ -125,7 +125,7 @@
         private System.Windows.Forms.Button btnBrowseProgramText;
         private System.Windows.Forms.TextBox txtProgramTextFileName;
         private System.Windows.Forms.Button btnRunAnalysis;
-        private System.Windows.Forms.TextBox txtResults;
+        private System.Windows.Forms.RichTextBox txtResults;
 
     }
 }

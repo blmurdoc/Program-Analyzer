@@ -139,5 +139,27 @@ namespace Services.Testing
             // Ensure that the main is not added to the class A
             Assert.Equal(0, UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Count);
         }
+
+        [Fact]
+        public void InitializeUnevaluatedObjects_MethodContainsSecurityObjectAsParameter_TranslationIsAddedToTheDictionary()
+        {
+            /// Initialize
+            // Create the attribute list
+            var attributeList = "SecureA.b";
+
+            // Initialize the security objects
+            UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
+
+            // Create the program text
+            var programText = "class SecureA { public bool b; public void Method () { b = false; } } class UnknownA { public void Method1 ( SecureA test ) { test.Method(); } }";
+
+            /// Test
+            // Call the MUT
+            UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
+
+            /// Assert
+            // Ensure that the method's dictionary contains the correct translation
+            Assert.Equal(1, UnevaluatedObjectManager.UnevaluatedObjects.Where(i => i.Name == "UnknownA").Single().Methods.Single().ParameterTranslations.Count);
+        }
     }
 }

@@ -66,7 +66,7 @@ namespace UI
             UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
 
             string results = "Case 1 Objects:\n";
-            foreach(Case1Object co in UnevaluatedObjectManager.Case1Manager.Case1Objects)
+            foreach(CaseObject co in UnevaluatedObjectManager.Case1Manager.Case1Objects)
             {
                 results += String.Format("{0}:\n", co.Name);
                 foreach(string s in co.MethodNames)
