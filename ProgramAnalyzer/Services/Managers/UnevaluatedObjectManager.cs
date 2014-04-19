@@ -155,8 +155,22 @@ namespace Services.Managers
                                     // Check if this attribute is a security attribute
                                     bool checkSecurityAttribute = false;
                                     foreach (SecurityAttribute sa in SecurityAttributeManager.SecurityAttributes)
+                                    {
                                         if (sa.Name == tempMethodEntry)
                                             checkSecurityAttribute = true;
+
+                                        // Check the method translation table
+                                        foreach(string de in methodDictionary.Keys)
+                                        {
+                                            // If the attribute is being referenced directly
+                                            var splitEntry = tempMethodEntry.Split('.');
+                                            for(int i = 0; i < splitEntry.Count(); i++)
+                                            {
+                                                if (splitEntry[i] == sa.Name && splitEntry[i - 1] == de)
+                                                    checkSecurityAttribute = true;
+                                            }
+                                        }
+                                    }
 
                                     // Set the affect field
                                     method.DirectlyAffectSecurityAttribute = checkSecurityAttribute;

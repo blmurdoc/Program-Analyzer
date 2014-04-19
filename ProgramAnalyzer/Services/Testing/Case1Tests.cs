@@ -12,7 +12,6 @@ namespace Services.Testing
     public class Case1Tests
     {
         UnevaluatedObjectManager UnevaluatedObjectManager = new UnevaluatedObjectManager();
-        Case1Manager Case1Manager = new Case1Manager();
 
         [Fact]
         public void InitializeCase1Objects_SingleCase1Object_SuccessfullyAddedToList()
@@ -52,11 +51,11 @@ namespace Services.Testing
 
             /// Test
             // Call the MUT
-            Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
+            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
 
             /// Assert
             // Ensure that the obj2 is now in the Case1 Objects
-            Assert.Equal(1, Case1Manager.Case1Objects.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Case1Manager.Case1Objects.Count);
         }
         
         [Fact]
@@ -106,12 +105,12 @@ namespace Services.Testing
 
             /// Test
             // Call the MUT
-            Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
+            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
 
             /// Assert
             // Ensure that the obj2 is now in the Case1 Objects
-            Assert.Equal(1, Case1Manager.Case1Objects.Count);
-            Assert.Equal(2, Case1Manager.Case1Objects.Single().MethodNames.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Case1Manager.Case1Objects.Count);
+            Assert.Equal(2, UnevaluatedObjectManager.Case1Manager.Case1Objects.Single().MethodNames.Count);
         }
     }
 }
