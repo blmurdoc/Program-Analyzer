@@ -64,12 +64,23 @@ namespace UI
             UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
             UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
             UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
+            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.UnevaluatedObjects);
 
             string results = "Case 1 Objects:\n";
             foreach(CaseObject co in UnevaluatedObjectManager.Case1Manager.Case1Objects)
             {
                 results += String.Format("{0}:\n", co.Name);
                 foreach(string s in co.MethodNames)
+                {
+                    results += String.Format("\t{0}\n", s);
+                }
+            }
+            results += "\n\n";
+            results += "Case 2 Objects:\n";
+            foreach (CaseObject co in UnevaluatedObjectManager.Case2Manager.Case2Objects)
+            {
+                results += String.Format("{0}:\n", co.Name);
+                foreach (string s in co.MethodNames)
                 {
                     results += String.Format("\t{0}\n", s);
                 }

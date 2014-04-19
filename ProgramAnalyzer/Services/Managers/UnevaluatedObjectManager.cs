@@ -160,13 +160,13 @@ namespace Services.Managers
                                             checkSecurityAttribute = true;
 
                                         // Check the method translation table
-                                        foreach(string de in methodDictionary.Keys)
+                                        foreach(string de in methodDictionary.Values)
                                         {
                                             // If the attribute is being referenced directly
                                             var splitEntry = tempMethodEntry.Split('.');
                                             for(int i = 0; i < splitEntry.Count(); i++)
                                             {
-                                                if (splitEntry[i] == sa.Name && splitEntry[i - 1] == de)
+                                                if (splitEntry[i] == sa.Name && i > 0 && splitEntry[i - 1] == de)
                                                     checkSecurityAttribute = true;
                                             }
                                         }

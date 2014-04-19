@@ -20,7 +20,7 @@ namespace Services.Testing
             var attributeList = "A.b";
 
             // Create the programText
-            var programText = "class A { public bool b; } class C { public void Method ( A securityObject ) { A.b = false; } }";
+            var programText = "class A { public bool b; } class C { public void Method ( A securityObject ) { securityObject.b = false; } }";
 
             // Initialize the objects
             UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
@@ -45,7 +45,7 @@ namespace Services.Testing
             var attributeList = "A.b";
 
             // Create the programText
-            var programText = "class A { public bool b; } class C { public void Method ( A securityObject ) { A.b = false; } public void Method2 (A securityObject ) { A.b = true; } }";
+            var programText = "class A { public bool b; } class C { public void Method ( A securityObject ) { securityObject.b = false; } public void Method2 (A securityObject ) { securityObject.b = true; } }";
 
             // Initialize the objects
             UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
