@@ -46,12 +46,12 @@ namespace Services.Testing
                 });
 
             // Add the objects to the unevaluated list
-            UnevaluatedObjectManager.UnevaluatedObjects.Add(obj1);
-            UnevaluatedObjectManager.UnevaluatedObjects.Add(obj2);
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj1);
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj2);
 
             /// Test
             // Call the MUT
-            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
+            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.Global);
 
             /// Assert
             // Ensure that the obj2 is now in the Case1 Objects
@@ -100,12 +100,12 @@ namespace Services.Testing
             });
 
             // Add the objects to the unevaluated list
-            UnevaluatedObjectManager.UnevaluatedObjects.Add(obj1);
-            UnevaluatedObjectManager.UnevaluatedObjects.Add(obj2);
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj1);
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj2);
 
             /// Test
             // Call the MUT
-            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.UnevaluatedObjects);
+            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.Global);
 
             /// Assert
             // Ensure that the obj2 is now in the Case1 Objects

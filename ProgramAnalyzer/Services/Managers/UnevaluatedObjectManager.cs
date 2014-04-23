@@ -5,15 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Services.Managers;
 
 namespace Services.Managers
 {
     public class UnevaluatedObjectManager
     {
-        public List<UnevaluatedObject> UnevaluatedObjects = new List<UnevaluatedObject>();
+        public Global Global = new Global();
         public SecurityAttributeManager SecurityAttributeManager = new SecurityAttributeManager();
         public Case1Manager Case1Manager = new Case1Manager();
         public Case2Manager Case2Manager = new Case2Manager();
+        public Case3Manager Case3Manager = new Case3Manager();
 
         /// <summary>
         /// Goes through the program code and creates classes for all given objects.
@@ -142,12 +144,15 @@ namespace Services.Managers
                                             ObjectReferences.Add(paramKey, methodSplit[0]);
                                     }
 
-                                    var dictionaryEntry = ObjectReferences.Where(i => i.Value == methodSplit[0]).Single();                                    
+                                    if (ObjectReferences.Count > 0)
+                                    {
+                                        var dictionaryEntry = ObjectReferences.Where(i => i.Value == methodSplit[0]).Single();
 
-                                    // Add this method to the original object's called by methods
-                                    var calledByMethod = new CalledByMethod() { Name = method.Name, ParentObjectName = paramKey == "" ? className : paramKey };
-                                    var originalObject = UnevaluatedObjects.Where(i => i.Name == dictionaryEntry.Key).Single();
-                                    originalObject.Methods.Where(i => i.Name == methodSplit[1]).Single().CalledByMethods.Add(calledByMethod);
+                                        // Add this method to the original object's called by methods
+                                        var calledByMethod = new CalledByMethod() { Name = method.Name, ParentObjectName = className };
+                                        var originalObject = Global.UnevaluatedObjects.Where(i => i.Name == dictionaryEntry.Key).Single();
+                                        originalObject.Methods.Where(i => i.Name == methodSplit[1]).Single().CalledByMethods.Add(calledByMethod);
+                                    }
                                 }
                                 // Could be directly affecting a security attribute
                                 else if(brokenUpClass[tempMethodIndex + 1] == "=")
@@ -224,7 +229,7 @@ namespace Services.Managers
                     if (sa.ParentObjectName == unevaluatedObject.Name)
                         unevaluatedObject.IsSecurityObject = true;
 
-                UnevaluatedObjects.Add(unevaluatedObject);
+                Global.UnevaluatedObjects.Add(unevaluatedObject);
             }
         }
     }

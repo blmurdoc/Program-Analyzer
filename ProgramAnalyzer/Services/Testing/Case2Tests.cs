@@ -28,9 +28,7 @@ namespace Services.Testing
 
             /// Test
             // Call the MUT
-            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.UnevaluatedObjects);
-
-            var test = UnevaluatedObjectManager.UnevaluatedObjects;
+            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.Global);
 
             /// Assert
             // Ensure that the object is in the list
@@ -53,9 +51,7 @@ namespace Services.Testing
 
             /// Test
             // Call the MUT
-            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.UnevaluatedObjects);
-
-            var test = UnevaluatedObjectManager.UnevaluatedObjects;
+            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.Global);
 
             /// Assert
             // Ensure that the object has both methods.

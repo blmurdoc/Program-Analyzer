@@ -13,10 +13,10 @@ namespace Services.Managers
         /// <summary>
         /// UO methods call SO methods that affect SA
         /// </summary>
-        public void InitializeCase1Objects(List<UnevaluatedObject> unevaluatedObjects)
+        public void InitializeCase1Objects(Global Global)
         {
             // Capture all Unevaluated Objects that are Secure.
-            var securityObjects = unevaluatedObjects.Where(i => i.IsSecurityObject);
+            var securityObjects = Global.UnevaluatedObjects.Where(i => i.IsSecurityObject);
 
             // Go through all security objects.
             foreach (UnevaluatedObject uo in securityObjects) 
@@ -41,6 +41,9 @@ namespace Services.Managers
                             Case1Objects.Add(case1object);
                         else 
                             obj.MethodNames.Add(cm.Name);
+
+                        // Make the object semi-secure
+                        Global.UnevaluatedObjects.Where(i => i.Name == case1object.Name).Single().IsSemiSecurityObject = true;
                     }
                 }
             }

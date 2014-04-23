@@ -25,7 +25,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the object was added to the list
-            Assert.Equal(1, UnevaluatedObjectManager.UnevaluatedObjects.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Global.UnevaluatedObjects.Count);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the method was added to the object
-            Assert.Equal(1, UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Global.UnevaluatedObjects.Single().Methods.Count);
         }
 
         [Fact]
@@ -63,7 +63,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the object was marked as a security object
-            Assert.True(UnevaluatedObjectManager.UnevaluatedObjects.Single().IsSecurityObject);
+            Assert.True(UnevaluatedObjectManager.Global.UnevaluatedObjects.Single().IsSecurityObject);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the MethodName1 has Methodname2 as a called by method
-            Assert.Equal(1, UnevaluatedObjectManager.UnevaluatedObjects.Where(i => i.Name == "A").Single().Methods.Single().CalledByMethods.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Global.UnevaluatedObjects.Where(i => i.Name == "A").Single().Methods.Single().CalledByMethods.Count);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace Services.Testing
             UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
 
             // Get the first object back
-            var objectAfter = UnevaluatedObjectManager.UnevaluatedObjects.Where(i => i.Name == "A").Single();
+            var objectAfter = UnevaluatedObjectManager.Global.UnevaluatedObjects.Where(i => i.Name == "A").Single();
 
             /// Assert
             // Ensure that the called by method's values are correct.
@@ -121,7 +121,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that Method1 is marked as directly affects security attribute
-            Assert.True(UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Single().DirectlyAffectSecurityAttribute);
+            Assert.True(UnevaluatedObjectManager.Global.UnevaluatedObjects.Single().Methods.Single().DirectlyAffectSecurityAttribute);
         }
 
         [Fact]
@@ -137,7 +137,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the main is not added to the class A
-            Assert.Equal(0, UnevaluatedObjectManager.UnevaluatedObjects.Single().Methods.Count);
+            Assert.Equal(0, UnevaluatedObjectManager.Global.UnevaluatedObjects.Single().Methods.Count);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Services.Testing
 
             /// Assert
             // Ensure that the method's dictionary contains the correct translation
-            Assert.Equal(1, UnevaluatedObjectManager.UnevaluatedObjects.Where(i => i.Name == "UnknownA").Single().Methods.Single().ParameterTranslations.Count);
+            Assert.Equal(1, UnevaluatedObjectManager.Global.UnevaluatedObjects.Where(i => i.Name == "UnknownA").Single().Methods.Single().ParameterTranslations.Count);
         }
     }
 }

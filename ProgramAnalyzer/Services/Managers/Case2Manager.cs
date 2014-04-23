@@ -13,10 +13,9 @@ namespace Services.Managers
         /// <summary>
         /// UO Method affects SA directly.
         /// </summary>
-        public void InitializeCase2Objects(List<UnevaluatedObject> unevaluatedObjects)
+        public void InitializeCase2Objects(Global Global)
         {
-            var case2Objects = new List<CaseObject>();
-            foreach(UnevaluatedObject uo in unevaluatedObjects)
+            foreach(UnevaluatedObject uo in Global.UnevaluatedObjects)
             {
                 if (uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute).Count() > 0 && !uo.IsSecurityObject)
                 {
@@ -30,6 +29,9 @@ namespace Services.Managers
                             Name = uo.Name,
                             MethodNames = methodNames
                         });
+
+                    // Make the object semi-security
+                    Global.UnevaluatedObjects.Where(i => i.Name == uo.Name).Single().IsSemiSecurityObject = true;
                 }
             }
         }
