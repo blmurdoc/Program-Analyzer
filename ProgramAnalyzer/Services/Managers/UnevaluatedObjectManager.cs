@@ -17,6 +17,7 @@ namespace Services.Managers
         public Case2Manager Case2Manager = new Case2Manager();
         public Case3Manager Case3Manager = new Case3Manager();
         public Case5Manager Case5Manager = new Case5Manager();
+        public Case6Manager Case6Manager = new Case6Manager();
 
         /// <summary>
         /// Goes through the program code and creates classes for all given objects.

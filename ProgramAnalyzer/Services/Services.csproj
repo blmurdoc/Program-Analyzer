@@ -74,6 +74,7 @@
     <Compile Include="Testing\Case2Tests.cs" />
     <Compile Include="Testing\Case3Tests.cs" />
     <Compile Include="Testing\Case5Tests.cs" />
+    <Compile Include="Testing\Case6Tests.cs" />
     <Compile Include="Testing\SecurityAttributeTests.cs" />
     <Compile Include="Testing\UnevaluatedObjectTests.cs" />
   </ItemGroup>
