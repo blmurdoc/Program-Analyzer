@@ -112,5 +112,50 @@ namespace Services.Testing
             Assert.Equal(1, UnevaluatedObjectManager.Case1Manager.Case1Objects.Count);
             Assert.Equal(2, UnevaluatedObjectManager.Case1Manager.Case1Objects.Single().MethodNames.Count);
         }
+
+        [Fact]
+        public void InitializeCase1Objects_GivenCase1Object_ObjectMarkedSemiSecurity()
+        {
+            /// Initialize
+            // Create the list of unevaluated objects
+            var obj1 = new UnevaluatedObject()
+            {
+                IsSecurityObject = true,
+                Methods = new List<OwnedMethod>(),
+                Name = "FirstObject"
+            };
+            obj1.Methods.Add(new OwnedMethod()
+            {
+                DirectlyAffectSecurityAttribute = true,
+                Name = "MethodName",
+                CalledByMethods = new List<CalledByMethod>()
+            });
+            obj1.Methods.Single().CalledByMethods.Add(new CalledByMethod()
+            {
+                Name = "CalledByMethod",
+                ParentObjectName = "SecondObject"
+            });
+            var obj2 = new UnevaluatedObject()
+            {
+                Name = "SecondObject",
+                Methods = new List<OwnedMethod>()
+            };
+            obj2.Methods.Add(new OwnedMethod()
+            {
+                Name = "CalledByMethod"
+            });
+
+            // Add the objects to the unevaluated list
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj1);
+            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj2);
+
+            /// Test
+            // Call the MUT
+            UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.Global);
+
+            /// Assert
+            // Ensure that the object is marked semi-security
+            Assert.True(UnevaluatedObjectManager.Global.UnevaluatedObjects.Where(i => i.Name == "SecondObject").Single().IsSemiSecurityObject);
+        }
     }
 }

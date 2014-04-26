@@ -57,5 +57,28 @@ namespace Services.Testing
             // Ensure that the object has both methods.
             Assert.Equal(2, UnevaluatedObjectManager.Case2Manager.Case2Objects.Single().MethodNames.Count);
         }
+
+        [Fact]
+        public void InitializeCase2Objects_GivenCase2Object_ObjectMarkedSemiSecurity()
+        {
+            /// Initialize
+            // Create the attributeList
+            var attributeList = "A.b";
+
+            // Create the programText
+            var programText = "class A { public bool b; } class C { public void Method ( A securityObject ) { securityObject.b = false; } }";
+
+            // Initialize the objects
+            UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
+            UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
+
+            /// Test
+            // Call the MUT
+            UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.Global);
+
+            /// Assert
+            // Ensure that the object is marked semi-security
+            Assert.True(UnevaluatedObjectManager.Global.UnevaluatedObjects.Where(i => i.Name == "C").Single().IsSemiSecurityObject);
+        }
     }
 }

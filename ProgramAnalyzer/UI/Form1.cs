@@ -66,6 +66,7 @@ namespace UI
             UnevaluatedObjectManager.Case1Manager.InitializeCase1Objects(UnevaluatedObjectManager.Global);
             UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.Global);
             UnevaluatedObjectManager.Case3Manager.InitializeCase3Objects(UnevaluatedObjectManager.Global);
+            UnevaluatedObjectManager.Case5Manager.InitializeCase5Objects(UnevaluatedObjectManager.Global);
 
             string results = "Case 1 Objects:\n";
             foreach(CaseObject co in UnevaluatedObjectManager.Case1Manager.Case1Objects)
@@ -89,6 +90,16 @@ namespace UI
             results += "\n\n";
             results += "Case 3 Objects:\n";
             foreach (CaseObject co in UnevaluatedObjectManager.Case3Manager.Case3Objects)
+            {
+                results += String.Format("{0}:\n", co.Name);
+                foreach (string s in co.MethodNames)
+                {
+                    results += String.Format("\t{0}\n", s);
+                }
+            }
+            results += "\n\n";
+            results += "Case 5 Objects:\n";
+            foreach (CaseObject co in UnevaluatedObjectManager.Case5Manager.Case5Objects)
             {
                 results += String.Format("{0}:\n", co.Name);
                 foreach (string s in co.MethodNames)

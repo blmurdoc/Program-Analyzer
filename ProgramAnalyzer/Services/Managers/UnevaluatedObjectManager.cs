@@ -16,6 +16,7 @@ namespace Services.Managers
         public Case1Manager Case1Manager = new Case1Manager();
         public Case2Manager Case2Manager = new Case2Manager();
         public Case3Manager Case3Manager = new Case3Manager();
+        public Case5Manager Case5Manager = new Case5Manager();
 
         /// <summary>
         /// Goes through the program code and creates classes for all given objects.
@@ -179,6 +180,26 @@ namespace Services.Managers
 
                                     // Set the affect field
                                     method.DirectlyAffectSecurityAttribute = checkSecurityAttribute;
+                                }
+                                else
+                                {
+                                    var parenCheck = brokenUpClass[tempMethodIndex + 1].First();
+
+                                    // Could be a method call on the same object
+                                    if(parenCheck == '(')
+                                    {
+                                        var methodExists = Methods.Where(i => i.Name == tempMethodEntry).SingleOrDefault();
+                                        if (methodExists != null)
+                                        {
+                                            methodExists.CalledByMethods.Add(new CalledByMethod()
+                                                {
+                                                    Name = method.Name,
+                                                    ParentObjectName = className
+                                                });
+                                        }
+                                    }
+
+                                
                                 }
                                 // Set the translation dictionary.
                                 method.ParameterTranslations = methodDictionary;
