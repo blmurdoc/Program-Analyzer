@@ -49,13 +49,15 @@ namespace Services.Managers
                           // If doesn't exist add new object
                           if (objectExists == null)
                           {
-                              case5.MethodNames.Add(cm.Name);
+                              if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                                case5.MethodNames.Add(cm.Name);
                               Case5Objects.Add(case5);
                           }
                           // Add method name
                           else
                           {
-                              objectExists.MethodNames.Add(cm.Name);
+                              if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                                objectExists.MethodNames.Add(cm.Name);
                           }
                           // Mark object as semi security
                           Global.UnevaluatedObjects.Where(i => i.Name == case5.Name).Single().IsSemiSecurityObject = true;

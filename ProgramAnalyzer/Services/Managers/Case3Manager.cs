@@ -40,12 +40,14 @@ namespace Services.Managers
                         var objectExists = Case3Objects.Where(i => i.Name == cm.ParentObjectName).SingleOrDefault();
                         if(objectExists == null)
                         {
-                            case3Object.MethodNames.Add(cm.Name);
+                            if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                                case3Object.MethodNames.Add(cm.Name);
                             Case3Objects.Add(case3Object);
                         }
                         else
                         {
-                            Case3Objects.Where(i => i.Name == cm.ParentObjectName).Single().MethodNames.Add(cm.Name);
+                            if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                                Case3Objects.Where(i => i.Name == cm.ParentObjectName).Single().MethodNames.Add(cm.Name);
                         }
 
                         // Make the object semi-security

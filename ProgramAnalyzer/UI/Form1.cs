@@ -67,7 +67,8 @@ namespace UI
             UnevaluatedObjectManager.Case2Manager.InitializeCase2Objects(UnevaluatedObjectManager.Global);
             UnevaluatedObjectManager.Case3Manager.InitializeCase3Objects(UnevaluatedObjectManager.Global);
             UnevaluatedObjectManager.Case5Manager.InitializeCase5Objects(UnevaluatedObjectManager.Global);
-            UnevaluatedObjectManager.Case6Manager.InitializeCase6Objects(UnevaluatedObjectManager.Global);
+            UnevaluatedObjectManager.Case6Manager.InitializeCase6Criteria1Objects(UnevaluatedObjectManager.Global);
+            UnevaluatedObjectManager.Case6Manager.InitializeCase6Criteria2Objects(UnevaluatedObjectManager.Global);
 
             string results = "Case 1 Objects:\n";
             foreach(CaseObject co in UnevaluatedObjectManager.Case1Manager.Case1Objects)

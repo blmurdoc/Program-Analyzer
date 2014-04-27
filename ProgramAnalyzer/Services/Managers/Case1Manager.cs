@@ -35,12 +35,16 @@ namespace Services.Managers
                             Name = cm.ParentObjectName,
                             MethodNames = new List<string>()
                         };
-                        case1object.MethodNames.Add(cm.Name);
+                        if (case1object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                            case1object.MethodNames.Add(cm.Name);
                         var obj = Case1Objects.Where(i => i.Name == case1object.Name).SingleOrDefault();
                         if (obj == null)
                             Case1Objects.Add(case1object);
-                        else 
-                            obj.MethodNames.Add(cm.Name);
+                        else
+                        {
+                            if (case1object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                                obj.MethodNames.Add(cm.Name);
+                        }
 
                         // Make the object semi-secure
                         Global.UnevaluatedObjects.Where(i => i.Name == case1object.Name).Single().IsSemiSecurityObject = true;
