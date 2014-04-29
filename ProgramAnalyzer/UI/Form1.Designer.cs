@@ -94,6 +94,7 @@
             // 
             this.txtResults.Location = new System.Drawing.Point(49, 232);
             this.txtResults.Name = "txtResults";
+            this.txtResults.ReadOnly = true;
             this.txtResults.Size = new System.Drawing.Size(601, 324);
             this.txtResults.TabIndex = 6;
             this.txtResults.Text = "";

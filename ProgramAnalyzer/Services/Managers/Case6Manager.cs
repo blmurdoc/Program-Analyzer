@@ -68,7 +68,7 @@ namespace Services.Managers
                                         // Object already exists, add the method name
                                         else
                                         {
-                                            if (case6Object.MethodNames.Where(i => i == cmm.Name).SingleOrDefault() == null)
+                                            if (objectExists.MethodNames.Where(i => i == cmm.Name).SingleOrDefault() == null)
                                                 objectExists.MethodNames.Add(cmm.Name);
                                         }
 
@@ -128,7 +128,7 @@ namespace Services.Managers
                             // Object already exists, add the method name
                             else
                             {
-                                if (case6Object.MethodNames.Where(i => i == cbm.Name).SingleOrDefault() == null)
+                                if (checkExists.MethodNames.Where(i => i == cbm.Name).SingleOrDefault() == null)
                                     checkExists.MethodNames.Add(cbm.Name);
                             }
 

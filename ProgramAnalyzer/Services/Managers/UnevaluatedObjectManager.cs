@@ -116,6 +116,9 @@ namespace Services.Managers
                             // Go through the method
                             while(!tempMethodEncounteredOpenBrace || tempMethodBracesCount != 0)
                             {
+                                // Reset the object references for the new method
+                                ObjectReferences = new Dictionary<string, string>();
+
                                 tempMethodEntry = brokenUpClass[tempMethodIndex];
                                 // Keep track of the open braces
                                 if (tempMethodEntry == "{")
