@@ -18,52 +18,59 @@ namespace Services.Managers
             // Get all security objects
             var securityObject = Global.UnevaluatedObjects.Where(i => i.IsSecurityObject);
 
-            // Go through all of the security onjects
+            // Go through all of the security objects
             foreach (UnevaluatedObject uo in securityObject)
+                Case5SecurityObjectIteration(Global, securityObject, uo);
+        }
+
+        /// <summary>
+        /// Iterate through case5 objects 
+        /// </summary>
+        private void Case5SecurityObjectIteration(Global Global, IEnumerable<UnevaluatedObject> securityObject, UnevaluatedObject uo)
+        {
+            // Get all methods that affect security attributes
+            var methodDirectlyAffectsAttributes = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
+
+            // Go through all the methods 
+            foreach (OwnedMethod om in methodDirectlyAffectsAttributes)
+                // Go through all methods that call the above methods
+                foreach (CalledByMethod cm in om.CalledByMethods)
+                    InsertCase5ObjectIntoList(Global, securityObject, cm);
+        }
+
+        /// <summary>
+        /// Insert case 5 object into the list and mark as semi-secure.
+        /// </summary>
+        private void InsertCase5ObjectIntoList(Global Global, IEnumerable<UnevaluatedObject> securityObject, CalledByMethod cm)
+        {
+            // Check if parent is security object
+            var obj = securityObject.Where(i => i.Name == cm.ParentObjectName).SingleOrDefault();
+
+            // Check is Object is null
+            if (obj != null)
             {
-                // Get all methods that affect security attributes
-                var methodDirectlyAffectsAttributes = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
-
-                // Go through all the methods 
-                foreach (OwnedMethod om in methodDirectlyAffectsAttributes)
+                // Add new case 5 objects name and method names
+                var case5 = new CaseObject()
                 {
-                    // Go through all methods that call the above methods
-                    foreach(CalledByMethod cm in om.CalledByMethods)
-                    {
-                        // Check if parent is security object
-                        var obj = securityObject.Where(i => i.Name == cm.ParentObjectName).SingleOrDefault();
+                    Name = obj.Name,
+                    MethodNames = new List<string>()
+                };
+                // Check is object already belongs to the case 5 objects
+                var objectExists = Case5Objects.Where(i => i.Name == case5.Name).SingleOrDefault();
 
-                        // Check is Object is null
-                        if (obj != null)
-                        {
-                            // Add new case 5 objects name and method names
-                            var case5 = new CaseObject()
-                            {
-                              Name = obj.Name, 
-                              MethodNames = new List<string>()
-
-                          };
-                          // Check is object already belongs to the case 5 objects
-                          var objectExists = Case5Objects.Where(i => i.Name == case5.Name).SingleOrDefault();
-
-                          // If doesn't exist add new object
-                          if (objectExists == null)
-                          {
-                              if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
-                                case5.MethodNames.Add(cm.Name);
-                              Case5Objects.Add(case5);
-                          }
-                          // Add method name
-                          else
-                          {
-                              if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
-                                objectExists.MethodNames.Add(cm.Name);
-                          }
-                          // Mark object as semi security
-                          Global.UnevaluatedObjects.Where(i => i.Name == case5.Name).Single().IsSemiSecurityObject = true;
-                       }
-                   }
+                // If doesn't exist add new object
+                if (objectExists == null)
+                {
+                    if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                        case5.MethodNames.Add(cm.Name);
+                    Case5Objects.Add(case5);
                 }
+                // Add method name
+                else
+                    if (case5.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                        objectExists.MethodNames.Add(cm.Name);
+                // Mark object as semi security
+                Global.UnevaluatedObjects.Where(i => i.Name == case5.Name).Single().IsSemiSecurityObject = true;
             }
         }
     }

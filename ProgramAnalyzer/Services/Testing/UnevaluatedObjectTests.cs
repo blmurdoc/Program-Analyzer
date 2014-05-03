@@ -71,7 +71,7 @@ namespace Services.Testing
         {
             /// Initialize
             // Create the program text
-            var programText = "class A { public void MethodName1 () { } } class B { public A testA; public void MethodName2 () { testA.MethodName1 () } }";
+            var programText = "class A { public void MethodName1 () { } } class B { public void MethodName2 ( A testA ) { testA.MethodName1 () } }";
 
             /// Test
             // Call the MUT
@@ -87,7 +87,7 @@ namespace Services.Testing
         {
             /// Initialize
             // Create the program text
-            var programText = "class A { public void MethodName1 () { } } class B { public A testA; public void MethodName2 () { testA.MethodName1 () } }";
+            var programText = "class A { public void MethodName1 () { } } class B { public void MethodName2 ( A testA ) { testA.MethodName1 () } }";
             var calledByMethodName = "MethodName2";
             var calledByMethodParentObjectName = "B";
 

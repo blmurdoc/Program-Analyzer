@@ -62,46 +62,13 @@ namespace Services.Testing
         public void InitializeCase1Objects_GivenCase1ObjectWithTwoCase1Methods_SingleCaseOneObjectWithTwoMethodsIsInList()
         {
             /// Initialize
-            // Create the list of unevaluated objects
-            var obj1 = new UnevaluatedObject()
-            {
-                IsSecurityObject = true,
-                Methods = new List<OwnedMethod>(),
-                Name = "FirstObject"
-            };
-            obj1.Methods.Add(new OwnedMethod()
-            {
-                DirectlyAffectSecurityAttribute = true,
-                Name = "MethodName",
-                CalledByMethods = new List<CalledByMethod>()
-            });
-            obj1.Methods.Single().CalledByMethods.Add(new CalledByMethod()
-            {
-                Name = "CalledByMethod1",
-                ParentObjectName = "SecondObject"
-            });
-            obj1.Methods.Single().CalledByMethods.Add(new CalledByMethod()
-            {
-                Name = "CalledByMethod2",
-                ParentObjectName = "SecondObject"
-            });
-            var obj2 = new UnevaluatedObject()
-            {
-                Name = "SecondObject",
-                Methods = new List<OwnedMethod>()
-            };
-            obj2.Methods.Add(new OwnedMethod()
-            {
-                Name = "CalledByMethod1"
-            });
-            obj2.Methods.Add(new OwnedMethod()
-            {
-                Name = "CalledByMethod2"
-            });
+            // Create the attribute list
+            var attributeList = "A.b";
+            var programText = "class A { public bool b; public void Method1 () { b = false; } } class C { public void Method2 ( A testA ) { testA.Method1 (); } public void Method3 ( A testB ) { testB.Method1 (); } }";
 
-            // Add the objects to the unevaluated list
-            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj1);
-            UnevaluatedObjectManager.Global.UnevaluatedObjects.Add(obj2);
+            // Set up the initializer
+            UnevaluatedObjectManager.SecurityAttributeManager.InitializeSecurityAttributes(attributeList);
+            UnevaluatedObjectManager.InitializeUnevaluatedObjects(programText);
 
             /// Test
             // Call the MUT

@@ -21,40 +21,48 @@ namespace Services.Managers
             // Go through the semi-security objects
             foreach(UnevaluatedObject uo in semiSecurityObjects)
             {
-                // Get the methods that directly affect SO attributes
-                var directlyAffectMethods = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
-
-                // Go through each method
-                foreach(OwnedMethod om in directlyAffectMethods)
-                {
-                    // Place every object that calls these methods into the case 3 objects list
-                    foreach(CalledByMethod cm in om.CalledByMethods)
-                    {
-                        var case3Object = new CaseObject()
-                        {
-                            Name = cm.ParentObjectName,
-                            MethodNames = new List<string>()
-                        };
-
-                        // Check for duplicates
-                        var objectExists = Case3Objects.Where(i => i.Name == cm.ParentObjectName).SingleOrDefault();
-                        if(objectExists == null)
-                        {
-                            if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
-                                case3Object.MethodNames.Add(cm.Name);
-                            Case3Objects.Add(case3Object);
-                        }
-                        else
-                        {
-                            if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
-                                Case3Objects.Where(i => i.Name == cm.ParentObjectName).Single().MethodNames.Add(cm.Name);
-                        }
-
-                        // Make the object semi-security
-                        Global.UnevaluatedObjects.Where(i => i.Name == case3Object.Name).Single().IsSemiSecurityObject = true;
-                    }
-                }
+                SemiSecurityObjectIteration(Global, uo);
             }
+        }
+        /// <summary>
+        /// Go through the semi-security objects
+        /// </summary>
+        private void SemiSecurityObjectIteration(Global Global, UnevaluatedObject uo)
+        {
+            // Get the methods that directly affect SO attributes
+            var directlyAffectMethods = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
+
+            // Go through each method
+            foreach (OwnedMethod om in directlyAffectMethods)
+                // Place every object that calls these methods into the case 3 objects list
+                foreach (CalledByMethod cm in om.CalledByMethods)
+                    FindCase3Object(Global, cm);
+        }
+        /// <summary>
+        /// Found case3 object and insert it into the list.
+        /// </summary>
+        private void FindCase3Object(Global Global, CalledByMethod cm)
+        {
+            var case3Object = new CaseObject()
+            {
+                Name = cm.ParentObjectName,
+                MethodNames = new List<string>()
+            };
+
+            // Check for duplicates
+            var objectExists = Case3Objects.Where(i => i.Name == cm.ParentObjectName).SingleOrDefault();
+            if (objectExists == null)
+            {
+                if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                    case3Object.MethodNames.Add(cm.Name);
+                Case3Objects.Add(case3Object);
+            }
+            else
+                if (case3Object.MethodNames.Where(i => i == cm.Name).SingleOrDefault() == null)
+                    Case3Objects.Where(i => i.Name == cm.ParentObjectName).Single().MethodNames.Add(cm.Name);
+
+            // Make the object semi-security
+            Global.UnevaluatedObjects.Where(i => i.Name == case3Object.Name).Single().IsSemiSecurityObject = true;
         }
     }
 }
