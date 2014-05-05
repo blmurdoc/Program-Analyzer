@@ -17,7 +17,7 @@ namespace Services.Managers
         {
             foreach(UnevaluatedObject uo in Global.UnevaluatedObjects)
             {
-                if (uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute).Count() > 0 && !uo.IsSecurityObject)
+                if (uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute).Count() > 0)
                 {
                     var methods = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
                     var methodNames = new List<string>();

@@ -32,6 +32,10 @@ namespace Services.Managers
             // Get the methods that directly affect SO attributes
             var directlyAffectMethods = uo.Methods.Where(i => i.DirectlyAffectSecurityAttribute);
 
+            // TODO: Go through tree of methods to the end to find if any directly affect attribute.
+            // Might need to be done in the InitializeUnevaluatedObjects method in 
+            // the Unevaluated manager
+
             // Go through each method
             foreach (OwnedMethod om in directlyAffectMethods)
                 // Place every object that calls these methods into the case 3 objects list

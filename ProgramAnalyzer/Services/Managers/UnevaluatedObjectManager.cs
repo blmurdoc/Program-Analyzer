@@ -272,6 +272,9 @@ namespace Services.Managers
                         checkSecurityAttribute = true;
                 }
             }
+
+            // TODO: Go through whole tree of methods to see which ones eventually affect the attribute
+
             return checkSecurityAttribute;
         }
 
